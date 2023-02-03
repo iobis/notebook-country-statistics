@@ -1,0 +1,113 @@
+---
+title: Data provider country statistics
+date: "`r Sys.Date()`"
+author: Pieter Provoost
+output: (function(...) {
+  rmdformats::robobook(toc_depth = 4, pandoc_args = c("+RTS", "-K2000m", "-RTS"), ...) })
+editor_options: 
+  chunk_output_type: console
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })  
+---
+
+## Config
+
+```{r message=FALSE, warning=FALSE}
+year <- 2022
+```
+
+## Dependencies
+
+```{r message=FALSE, warning=FALSE}
+library(DBI)
+library(dplyr)
+library(glue)
+library(countrycode)
+library(ggplot2)
+```
+
+## Load data
+
+```{r message=FALSE, warning=FALSE}
+readRenviron("env.txt")
+
+con <- dbConnect(RPostgres::Postgres(), dbname = Sys.getenv("OBIS_DB"), host = Sys.getenv("OBIS_HOST"), port = Sys.getenv("OBIS_PORT"), user = Sys.getenv("OBIS_USER"), password = Sys.getenv("OBIS_PASSWORD"), bigint = "integer")
+
+res <- dbSendQuery(con, glue("
+    select
+    	datasets.id,
+    	datasets.url,
+    	(datasets.statistics->>'Occurrence')::int as records,
+    	extract('year' from datasets.created) as year,
+    	persons.organization,
+    	persons.country as person_country,
+    	ih.country as inst_country,
+    	persons.oceanexpert_institution_id
+    from datasets
+    left join metadata.lnk_dataset_person ldp on ldp.dataset_id = datasets.id
+    left join metadata.persons on ldp.person_id = persons.id
+    left join metadata.institution_hierarchy ih on ih.id = persons.oceanexpert_institution_id
+    where extract('year' from datasets.created) = {year}
+    order by (datasets.statistics->>'Occurrence')::int desc nulls last, datasets.id
+"))
+datasets <- dbFetch(res)
+dbClearResult(res)
+```
+
+## Cleanup country names
+
+```{r message=FALSE, warning=FALSE}
+country_codes <- countrycode::codelist %>% select(name = un.name.en, iso2c) %>%
+  filter(!is.na(iso2c))
+
+datasets <- datasets %>%
+  left_join(country_codes, by = c("person_country" = "iso2c")) %>%
+  rowwise() %>%
+  mutate(country = paste0(na.omit(unique(c(inst_country, name))), collapse = " | ")) %>%
+  mutate_all(~na_if(., ""))
+
+head(datasets)
+```
+
+## Statistics
+
+```{r message=FALSE, warning=FALSE}
+stats <- datasets %>%
+  distinct(id, records, country) %>%
+  filter(!is.na(country)) %>%
+  group_by(country) %>%
+  summarize(datasets = n(), records = sum(records)) %>%
+  arrange(desc(records))
+
+head(stats)
+```
+
+Add region info:
+
+```{r message=FALSE, warning=FALSE}
+stats <- stats %>%
+  mutate(country = stringr::str_replace(country, "Wallis Futuna Islands", "Wallis and Futuna Islands")) %>%
+  left_join(m49::m49_full %>% select(country_or_area, ldc, lldc, sids, developed, developing, region_name), by = c("country" = "country_or_area"))
+
+write.csv(stats, file = "output/stats.csv", row.names = FALSE)
+
+stats %>% relocate(country, records) %>% rmarkdown::paged_table(options = list(rows.print = 100))
+```
+
+## Visualize
+
+```{r message=FALSE, warning=FALSE}
+stats <- stats %>%
+  mutate(country = factor(country, levels = stats$country[order(stats$records)])) %>%
+  mutate(classification = factor(ifelse(sids, "SIDS", ifelse(region_name == "Africa", "Africa", "other")), levels = c("SIDS", "Africa", "other")))
+
+ggplot(data = stats) +
+  geom_bar(aes(x = country, y = records, fill = classification), stat = "identity") +
+  theme_minimal() +
+  coord_flip() +
+  scale_fill_manual(values = c("#e9933e", "#f3c654", "#cccccc")) +
+  ggtitle("Biodiversity records contributed to OBIS in 2022 by country") +
+  scale_y_continuous(labels = scales::label_comma())
+
+ggsave("output/graph.png", width = 12, height = 7, dpi = 300, scale = 1.2, bg = "white")
+```
