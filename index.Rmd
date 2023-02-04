@@ -13,7 +13,8 @@ knit: (function(inputFile, encoding) {
 ## Config
 
 ```{r message=FALSE, warning=FALSE}
-year <- 2022
+start_year <- 2020
+end_year <- 2022
 ```
 
 ## Dependencies
@@ -47,7 +48,7 @@ res <- dbSendQuery(con, glue("
     left join metadata.lnk_dataset_person ldp on ldp.dataset_id = datasets.id
     left join metadata.persons on ldp.person_id = persons.id
     left join metadata.institution_hierarchy ih on ih.id = persons.oceanexpert_institution_id
-    where extract('year' from datasets.created) = {year}
+    where extract('year' from datasets.created) >= {start_year} and extract('year' from datasets.created) <= {end_year}
     order by (datasets.statistics->>'Occurrence')::int desc nulls last, datasets.id
 "))
 datasets <- dbFetch(res)
@@ -63,7 +64,7 @@ country_codes <- countrycode::codelist %>% select(name = un.name.en, iso2c) %>%
 datasets <- datasets %>%
   left_join(country_codes, by = c("person_country" = "iso2c")) %>%
   rowwise() %>%
-  mutate(country = paste0(na.omit(unique(c(inst_country, name))), collapse = " | ")) %>%
+  mutate(country = ifelse(!is.na(inst_country), inst_country, name)) %>%
   mutate_all(~na_if(., ""))
 
 head(datasets)
@@ -73,9 +74,10 @@ head(datasets)
 
 ```{r message=FALSE, warning=FALSE}
 stats <- datasets %>%
-  distinct(id, records, country) %>%
+  mutate(country = stringr::str_replace(country, "Réunion", "France")) %>%
+  distinct(id, records, year, country) %>%
   filter(!is.na(country)) %>%
-  group_by(country) %>%
+  group_by(country, year) %>%
   summarize(datasets = n(), records = sum(records)) %>%
   arrange(desc(records))
 
@@ -91,14 +93,18 @@ stats <- stats %>%
 
 write.csv(stats, file = "output/stats.csv", row.names = FALSE)
 
-stats %>% relocate(country, records) %>% rmarkdown::paged_table(options = list(rows.print = 100))
+stats %>% relocate(country, year, records) %>% rmarkdown::paged_table(options = list(rows.print = 100))
 ```
 
 ## Visualize
 
 ```{r message=FALSE, warning=FALSE}
+stats_all <- stats %>%
+  group_by(country) %>%
+  summarize(records = sum(records))
+
 stats <- stats %>%
-  mutate(country = factor(country, levels = stats$country[order(stats$records)])) %>%
+  mutate(country = factor(country, levels = stats_all$country[order(stats_all$records)])) %>%
   mutate(classification = factor(ifelse(sids, "SIDS", ifelse(region_name == "Africa", "Africa", "other")), levels = c("SIDS", "Africa", "other")))
 
 ggplot(data = stats) +
@@ -106,8 +112,27 @@ ggplot(data = stats) +
   theme_minimal() +
   coord_flip() +
   scale_fill_manual(values = c("#e9933e", "#f3c654", "#cccccc")) +
-  ggtitle("Biodiversity records contributed to OBIS in 2022 by country") +
-  scale_y_continuous(labels = scales::label_comma())
+  ggtitle("Biodiversity records contributed to OBIS by country") +
+  scale_y_continuous(labels = scales::label_comma()) +
+  facet_wrap(~year)
+
+ggsave("output/graph_untransformed.png", width = 12, height = 7, dpi = 300, scale = 1.2, bg = "white")
+
+ggplot(data = stats) +
+  geom_bar(aes(x = country, y = records, fill = classification), stat = "identity") +
+  theme_minimal() +
+  coord_flip() +
+  scale_fill_manual(values = c("#e9933e", "#f3c654", "#cccccc")) +
+  ggtitle("Biodiversity records contributed to OBIS by country") +
+  scale_y_continuous(labels = scales::label_comma(), trans = "log10") +
+  facet_wrap(~year)
 
 ggsave("output/graph.png", width = 12, height = 7, dpi = 300, scale = 1.2, bg = "white")
+```
+
+```{r message=FALSE, warning=FALSE}
+datasets %>%
+  distinct(id, year, records) %>%
+  group_by(year) %>%
+  summarize(records = sum(records, na.rm = TRUE), datasets = n())
 ```
