@@ -2863,7 +2863,8 @@ Provoost</span></li>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>))</span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>datasets <span class="ot">&lt;-</span> <span class="fu">dbFetch</span>(res) <span class="sc">%&gt;%</span></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">inst_country =</span> stringr<span class="sc">::</span><span class="fu">str_replace</span>(inst_country, <span class="st">&quot;Réunion&quot;</span>, <span class="st">&quot;France&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()</span></code></pre></div>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">inst_country =</span> stringr<span class="sc">::</span><span class="fu">str_replace</span>(inst_country, <span class="st">&quot;Wallis Futuna Islands&quot;</span>, <span class="st">&quot;Wallis and Futuna Islands&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()</span></code></pre></div>
 </div>
 <div id="cleanup-country-names" class="section level3">
 <h3>Cleanup country names</h3>
@@ -2894,9 +2895,8 @@ Provoost</span></li>
 <div id="add-region-info" class="section level3">
 <h3>Add region info</h3>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>datasets <span class="ot">&lt;-</span> datasets <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">country =</span> stringr<span class="sc">::</span><span class="fu">str_replace</span>(country, <span class="st">&quot;Wallis Futuna Islands&quot;</span>, <span class="st">&quot;Wallis and Futuna Islands&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(m49<span class="sc">::</span>m49_full <span class="sc">%&gt;%</span> <span class="fu">select</span>(country_or_area, ldc, lldc, sids, developed, developing, region_name), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span> <span class="ot">=</span> <span class="st">&quot;country_or_area&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">classification =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(sids, <span class="st">&quot;SIDS&quot;</span>, <span class="fu">ifelse</span>(region_name <span class="sc">==</span> <span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;other&quot;</span>)), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;SIDS&quot;</span>, <span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;other&quot;</span>)))</span></code></pre></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(m49<span class="sc">::</span>m49_full <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">country_or_area =</span> stringr<span class="sc">::</span><span class="fu">str_replace</span>(country_or_area, <span class="st">&quot;Turkey&quot;</span>, <span class="st">&quot;Türkiye&quot;</span>)) <span class="sc">%&gt;%</span> <span class="fu">select</span>(country_or_area, ldc, lldc, sids, developed, developing, region_name), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span> <span class="ot">=</span> <span class="st">&quot;country_or_area&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">classification =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(sids, <span class="st">&quot;SIDS&quot;</span>, <span class="fu">ifelse</span>(region_name <span class="sc">==</span> <span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;other&quot;</span>)), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;SIDS&quot;</span>, <span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;other&quot;</span>)))</span></code></pre></div>
 </div>
 <div id="statistics" class="section level3">
 <h3>Statistics</h3>
@@ -3011,8 +3011,8 @@ Provoost</span></li>
 <span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(classification, <span class="sc">!</span><span class="fu">is.na</span>(min_year), min_year) <span class="sc">%&gt;%</span></span>
 <span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(classification) <span class="sc">%&gt;%</span></span>
 <span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cumulative_countries =</span> <span class="fu">cumsum</span>(countries))</span></code></pre></div>
-<pre><code>## # A tibble: 13 × 4
-## # Groups:   classification [4]
+<pre><code>## # A tibble: 12 × 4
+## # Groups:   classification [3]
 ##    classification min_year countries cumulative_countries
 ##    &lt;fct&gt;             &lt;dbl&gt;     &lt;int&gt;                &lt;int&gt;
 ##  1 SIDS                 NA        13                   13
@@ -3023,11 +3023,10 @@ Provoost</span></li>
 ##  6 Africa               NA        14                   14
 ##  7 Africa             2021         1                   15
 ##  8 Africa             2022         1                   16
-##  9 other                NA        54                   54
-## 10 other              2019         1                   55
-## 11 other              2020         2                   57
-## 12 other              2022         3                   60
-## 13 &lt;NA&gt;                 NA         1                    1</code></pre>
+##  9 other                NA        55                   55
+## 10 other              2019         1                   56
+## 11 other              2020         2                   58
+## 12 other              2022         3                   61</code></pre>
 </div>
 
    

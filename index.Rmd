@@ -54,6 +54,7 @@ res <- dbSendQuery(con, glue("
 "))
 datasets <- dbFetch(res) %>%
   mutate(inst_country = stringr::str_replace(inst_country, "Réunion", "France")) %>%
+  mutate(inst_country = stringr::str_replace(inst_country, "Wallis Futuna Islands", "Wallis and Futuna Islands")) %>%
   distinct()
 ```
 
@@ -77,8 +78,7 @@ head(datasets)
 
 ```{r message=FALSE, warning=FALSE}
 datasets <- datasets %>%
-  mutate(country = stringr::str_replace(country, "Wallis Futuna Islands", "Wallis and Futuna Islands")) %>%
-  left_join(m49::m49_full %>% select(country_or_area, ldc, lldc, sids, developed, developing, region_name), by = c("country" = "country_or_area")) %>%
+  left_join(m49::m49_full %>% mutate(country_or_area = stringr::str_replace(country_or_area, "Turkey", "Türkiye")) %>% select(country_or_area, ldc, lldc, sids, developed, developing, region_name), by = c("country" = "country_or_area")) %>%
   mutate(classification = factor(ifelse(sids, "SIDS", ifelse(region_name == "Africa", "Africa", "other")), levels = c("SIDS", "Africa", "other")))
 ```
 
