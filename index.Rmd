@@ -10,14 +10,16 @@ knit: (function(inputFile, encoding) {
   rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })  
 ---
 
-## Config
+## New datasets since 2020
+
+### Config
 
 ```{r message=FALSE, warning=FALSE}
 start_year <- 2020
 end_year <- 2022
 ```
 
-## Dependencies
+### Dependencies
 
 ```{r message=FALSE, warning=FALSE}
 library(DBI)
@@ -27,7 +29,7 @@ library(countrycode)
 library(ggplot2)
 ```
 
-## Load data
+### Load data
 
 ```{r message=FALSE, warning=FALSE}
 readRenviron("env.txt")
@@ -48,14 +50,14 @@ res <- dbSendQuery(con, glue("
     left join metadata.lnk_dataset_person ldp on ldp.dataset_id = datasets.id
     left join metadata.persons on ldp.person_id = persons.id
     left join metadata.institution_hierarchy ih on ih.id = persons.oceanexpert_institution_id
-    where extract('year' from datasets.created) >= {start_year} and extract('year' from datasets.created) <= {end_year}
     order by (datasets.statistics->>'Occurrence')::int desc nulls last, datasets.id
 "))
-datasets <- dbFetch(res)
-dbClearResult(res)
+datasets <- dbFetch(res) %>%
+  mutate(inst_country = stringr::str_replace(inst_country, "Réunion", "France")) %>%
+  distinct()
 ```
 
-## Cleanup country names
+### Cleanup country names
 
 ```{r message=FALSE, warning=FALSE}
 country_codes <- countrycode::codelist %>% select(name = un.name.en, iso2c) %>%
@@ -65,49 +67,54 @@ datasets <- datasets %>%
   left_join(country_codes, by = c("person_country" = "iso2c")) %>%
   rowwise() %>%
   mutate(country = ifelse(!is.na(inst_country), inst_country, name)) %>%
-  mutate_all(~na_if(., ""))
+  mutate_all(~na_if(., "")) %>%
+  filter(!is.na(country))
 
 head(datasets)
 ```
 
-## Statistics
+### Add region info
 
 ```{r message=FALSE, warning=FALSE}
-stats <- datasets %>%
-  mutate(country = stringr::str_replace(country, "Réunion", "France")) %>%
-  distinct(id, records, year, country) %>%
+datasets <- datasets %>%
+  mutate(country = stringr::str_replace(country, "Wallis Futuna Islands", "Wallis and Futuna Islands")) %>%
+  left_join(m49::m49_full %>% select(country_or_area, ldc, lldc, sids, developed, developing, region_name), by = c("country" = "country_or_area")) %>%
+  mutate(classification = factor(ifelse(sids, "SIDS", ifelse(region_name == "Africa", "Africa", "other")), levels = c("SIDS", "Africa", "other")))
+```
+
+### Statistics
+
+```{r message=FALSE, warning=FALSE}
+recent_datasets <- datasets %>%
+  filter(year >= start_year & year <= end_year)
+
+recent_stats <- recent_datasets %>%
+  distinct(id, records, year, country, sids, region_name, classification) %>%
   filter(!is.na(country)) %>%
-  group_by(country, year) %>%
+  group_by(country, year, sids, region_name, classification) %>%
   summarize(datasets = n(), records = sum(records)) %>%
   arrange(desc(records))
 
-head(stats)
+head(recent_stats)
 ```
 
-Add region info:
-
 ```{r message=FALSE, warning=FALSE}
-stats <- stats %>%
-  mutate(country = stringr::str_replace(country, "Wallis Futuna Islands", "Wallis and Futuna Islands")) %>%
-  left_join(m49::m49_full %>% select(country_or_area, ldc, lldc, sids, developed, developing, region_name), by = c("country" = "country_or_area"))
-
-write.csv(stats, file = "output/stats.csv", row.names = FALSE)
-
-stats %>% relocate(country, year, records) %>% rmarkdown::paged_table(options = list(rows.print = 100))
+write.csv(recent_stats, file = "output/stats.csv", row.names = FALSE)
+recent_stats %>%
+  relocate(country, year, records) %>% rmarkdown::paged_table(options = list(rows.print = 100))
 ```
 
-## Visualize
+### Visualize
 
 ```{r message=FALSE, warning=FALSE}
-stats_all <- stats %>%
+stats_all_years <- recent_stats %>%
   group_by(country) %>%
   summarize(records = sum(records))
 
-stats <- stats %>%
-  mutate(country = factor(country, levels = stats_all$country[order(stats_all$records)])) %>%
-  mutate(classification = factor(ifelse(sids, "SIDS", ifelse(region_name == "Africa", "Africa", "other")), levels = c("SIDS", "Africa", "other")))
+recent_stats <- recent_stats %>%
+  mutate(country = factor(country, levels = stats_all_years$country[order(stats_all_years$records)]))
 
-ggplot(data = stats) +
+ggplot(data = recent_stats) +
   geom_bar(aes(x = country, y = records, fill = classification), stat = "identity") +
   theme_minimal() +
   coord_flip() +
@@ -118,7 +125,7 @@ ggplot(data = stats) +
 
 ggsave("output/graph_untransformed.png", width = 12, height = 7, dpi = 300, scale = 1.2, bg = "white")
 
-ggplot(data = stats) +
+ggplot(data = recent_stats) +
   geom_bar(aes(x = country, y = records, fill = classification), stat = "identity") +
   theme_minimal() +
   coord_flip() +
@@ -130,9 +137,42 @@ ggplot(data = stats) +
 ggsave("output/graph.png", width = 12, height = 7, dpi = 300, scale = 1.2, bg = "white")
 ```
 
+### Statistics
+
+Records and datasets per year:
+
 ```{r message=FALSE, warning=FALSE}
-datasets %>%
+recent_datasets %>%
   distinct(id, year, records) %>%
   group_by(year) %>%
   summarize(records = sum(records, na.rm = TRUE), datasets = n())
 ```
+
+Countries per year and classification:
+
+```{r message=FALSE, warning=FALSE}
+recent_stats %>%
+  group_by(year, classification) %>%
+  summarize(records = sum(records, na.rm = TRUE), datasets = n(), countries = length(unique(country)))
+```
+
+## All datasets so far
+
+```{r message=FALSE, warning=FALSE}
+stats <- datasets %>%
+  distinct(id, records, year, country, sids, region_name, classification) %>%
+  filter(!is.na(country)) %>%
+  group_by(country, year, sids, region_name, classification) %>%
+  summarize(datasets = n(), records = sum(records)) %>%
+  arrange(desc(records))
+
+stats %>%
+  group_by(country, classification) %>%
+  summarize(min_year = min(year)) %>%
+  group_by(classification, min_year) %>%
+  summarize(countries = n()) %>%
+  arrange(classification, !is.na(min_year), min_year) %>%
+  group_by(classification) %>%
+  mutate(cumulative_countries = cumsum(countries))
+```
+
