@@ -10,7 +10,7 @@ knit: (function(inputFile, encoding) {
   rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })  
 ---
 
-## New datasets since 2020
+## New OBIS datasets since 2020
 
 ### Config
 
@@ -77,9 +77,11 @@ head(datasets)
 ### Add region info
 
 ```{r message=FALSE, warning=FALSE}
-datasets <- datasets %>%
-  left_join(m49::m49_full %>% mutate(country_or_area = stringr::str_replace(country_or_area, "Turkey", "Türkiye")) %>% select(country_or_area, ldc, lldc, sids, developed, developing, region_name), by = c("country" = "country_or_area")) %>%
+countries <- m49::m49_full %>% mutate(country_or_area = stringr::str_replace(country_or_area, "Turkey", "Türkiye")) %>% select(country_or_area, ldc, lldc, sids, developed, developing, region_name) %>%
   mutate(classification = factor(ifelse(sids, "SIDS", ifelse(region_name == "Africa", "Africa", "other")), levels = c("SIDS", "Africa", "other")))
+
+datasets <- datasets %>%
+  left_join(countries, by = c("country" = "country_or_area"))
 ```
 
 ### Statistics
@@ -156,7 +158,7 @@ recent_stats %>%
   summarize(records = sum(records, na.rm = TRUE), datasets = n(), countries = length(unique(country)))
 ```
 
-## All datasets so far
+## All OBIS datasets so far
 
 ```{r message=FALSE, warning=FALSE}
 stats <- datasets %>%
@@ -176,3 +178,33 @@ stats %>%
   mutate(cumulative_countries = cumsum(countries))
 ```
 
+## BioEco GeoNode monitoring programmes
+
+```{r message=FALSE, warning=FALSE}
+layers <- jsonlite::fromJSON("https://geonode.goosocean.org/api/layers/")$objects
+regions <- unlist(layers$regions)
+```
+
+Fix region names:
+
+```{r message=FALSE, warning=FALSE}
+unique(regions[which(!regions %in% countries$country_or_area)])
+
+regions <- plyr::revalue(regions, c(
+  "United Kingdom" = "United Kingdom of Great Britain and Northern Ireland",
+  "Scotland" = "United Kingdom of Great Britain and Northern Ireland",
+  "Hawaii" = "United States of America",
+  "Micronesia, Federated States of" = "Micronesia (Federated States of)",
+  "Cape Verde" = "Cabo Verde",
+  "Faeroe Islands" = "Faroe Islands"
+))
+```
+
+```{r message=FALSE, warning=FALSE}
+bioeco_countries <- countries %>%
+  filter(country_or_area %in% regions)
+
+bioeco_countries %>%
+  group_by(classification) %>%
+  summarize(n())
+```

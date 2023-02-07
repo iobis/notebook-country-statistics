@@ -2,4 +2,5 @@
 .env
 env.txt
 .DS_Store
-
+*.Rproj
+.Rproj.user

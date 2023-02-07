@@ -7,7 +7,7 @@
 
         <meta name="author" content="Pieter Provoost" />
     
-        <meta name="date" content="2023-02-06" />
+        <meta name="date" content="2023-02-07" />
     
     <title>Data provider country statistics</title>
 
@@ -2784,7 +2784,8 @@ margin-left: 0 !important;
         </ul>
         <nav role="navigation" id="toc">
           <ul>
-          <li><a href="#new-datasets-since-2020" id="toc-new-datasets-since-2020">New datasets since 2020</a>
+          <li><a href="#new-obis-datasets-since-2020" id="toc-new-obis-datasets-since-2020">New OBIS datasets since
+          2020</a>
           <ul>
           <li><a href="#config" id="toc-config">Config</a></li>
           <li><a href="#dependencies" id="toc-dependencies">Dependencies</a></li>
@@ -2796,14 +2797,17 @@ margin-left: 0 !important;
           <li><a href="#visualize" id="toc-visualize">Visualize</a></li>
           <li><a href="#statistics-1" id="toc-statistics-1">Statistics</a></li>
           </ul></li>
-          <li><a href="#all-datasets-so-far" id="toc-all-datasets-so-far">All datasets so far</a></li>
+          <li><a href="#all-obis-datasets-so-far" id="toc-all-obis-datasets-so-far">All OBIS datasets so
+          far</a></li>
+          <li><a href="#bioeco-geonode-monitoring-programmes" id="toc-bioeco-geonode-monitoring-programmes">BioEco GeoNode
+          monitoring programmes</a></li>
           </ul>
         </nav>
         <ul class="authors">
           <li class="divider"></li>
                                 <li><span><i class="glyphicon glyphicon-user"></i> Pieter
 Provoost</span></li>
-                                         <li><span><i class="glyphicon glyphicon-calendar"></i> 2023-02-06</span></li>
+                                         <li><span><i class="glyphicon glyphicon-calendar"></i> 2023-02-07</span></li>
                   </ul>     
       </div>
       <div class="book-body fixed">
@@ -2824,8 +2828,8 @@ Provoost</span></li>
       
    
 <!-- Don't indent these lines or it will mess pre blocks indentation --> 
-<div id="new-datasets-since-2020" class="section level2">
-<h2>New datasets since 2020</h2>
+<div id="new-obis-datasets-since-2020" class="section level2">
+<h2>New OBIS datasets since 2020</h2>
 <div id="config" class="section level3">
 <h3>Config</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>start_year <span class="ot">&lt;-</span> <span class="dv">2020</span></span>
@@ -2894,9 +2898,11 @@ Provoost</span></li>
 </div>
 <div id="add-region-info" class="section level3">
 <h3>Add region info</h3>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>datasets <span class="ot">&lt;-</span> datasets <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(m49<span class="sc">::</span>m49_full <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">country_or_area =</span> stringr<span class="sc">::</span><span class="fu">str_replace</span>(country_or_area, <span class="st">&quot;Turkey&quot;</span>, <span class="st">&quot;Türkiye&quot;</span>)) <span class="sc">%&gt;%</span> <span class="fu">select</span>(country_or_area, ldc, lldc, sids, developed, developing, region_name), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span> <span class="ot">=</span> <span class="st">&quot;country_or_area&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">classification =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(sids, <span class="st">&quot;SIDS&quot;</span>, <span class="fu">ifelse</span>(region_name <span class="sc">==</span> <span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;other&quot;</span>)), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;SIDS&quot;</span>, <span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;other&quot;</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>countries <span class="ot">&lt;-</span> m49<span class="sc">::</span>m49_full <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">country_or_area =</span> stringr<span class="sc">::</span><span class="fu">str_replace</span>(country_or_area, <span class="st">&quot;Turkey&quot;</span>, <span class="st">&quot;Türkiye&quot;</span>)) <span class="sc">%&gt;%</span> <span class="fu">select</span>(country_or_area, ldc, lldc, sids, developed, developing, region_name) <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">classification =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(sids, <span class="st">&quot;SIDS&quot;</span>, <span class="fu">ifelse</span>(region_name <span class="sc">==</span> <span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;other&quot;</span>)), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;SIDS&quot;</span>, <span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;other&quot;</span>)))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>datasets <span class="ot">&lt;-</span> datasets <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(countries, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span> <span class="ot">=</span> <span class="st">&quot;country_or_area&quot;</span>))</span></code></pre></div>
 </div>
 <div id="statistics" class="section level3">
 <h3>Statistics</h3>
@@ -2994,8 +3000,8 @@ Provoost</span></li>
 ## 9  2022 other          18102816       43        43</code></pre>
 </div>
 </div>
-<div id="all-datasets-so-far" class="section level2">
-<h2>All datasets so far</h2>
+<div id="all-obis-datasets-so-far" class="section level2">
+<h2>All OBIS datasets so far</h2>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> datasets <span class="sc">%&gt;%</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(id, records, year, country, sids, region_name, classification) <span class="sc">%&gt;%</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(country)) <span class="sc">%&gt;%</span></span>
@@ -3027,6 +3033,47 @@ Provoost</span></li>
 ## 10 other              2019         1                   56
 ## 11 other              2020         2                   58
 ## 12 other              2022         3                   61</code></pre>
+</div>
+<div id="bioeco-geonode-monitoring-programmes" class="section level2">
+<h2>BioEco GeoNode monitoring programmes</h2>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>layers <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">fromJSON</span>(<span class="st">&quot;https://geonode.goosocean.org/api/layers/&quot;</span>)<span class="sc">$</span>objects</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>regions <span class="ot">&lt;-</span> <span class="fu">unlist</span>(layers<span class="sc">$</span>regions)</span></code></pre></div>
+<p>Fix region names:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(regions[<span class="fu">which</span>(<span class="sc">!</span>regions <span class="sc">%in%</span> countries<span class="sc">$</span>country_or_area)])</span></code></pre></div>
+<pre><code>##  [1] &quot;United Kingdom&quot;                  &quot;Baltic Sea&quot;                     
+##  [3] &quot;Mediterranean Sea&quot;               &quot;Scotland&quot;                       
+##  [5] &quot;Global&quot;                          &quot;California&quot;                     
+##  [7] &quot;Southern Ocean&quot;                  &quot;Europe&quot;                         
+##  [9] &quot;Faeroe Islands&quot;                  &quot;North America&quot;                  
+## [11] &quot;Americas&quot;                        &quot;Pacific&quot;                        
+## [13] &quot;Baker Island&quot;                    &quot;Hawaii&quot;                         
+## [15] &quot;Northwestern Hawaiian Islands&quot;   &quot;Howland Island&quot;                 
+## [17] &quot;Jarvis Islands&quot;                  &quot;Johnston Atoll&quot;                 
+## [19] &quot;Kingman Reef&quot;                    &quot;Micronesia, Federated States of&quot;
+## [21] &quot;Midway Islands&quot;                  &quot;Palmyra Atoll&quot;                  
+## [23] &quot;Wake Island&quot;                     &quot;Caribbean&quot;                      
+## [25] &quot;Cape Verde&quot;</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>regions <span class="ot">&lt;-</span> plyr<span class="sc">::</span><span class="fu">revalue</span>(regions, <span class="fu">c</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;United Kingdom&quot;</span> <span class="ot">=</span> <span class="st">&quot;United Kingdom of Great Britain and Northern Ireland&quot;</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Scotland&quot;</span> <span class="ot">=</span> <span class="st">&quot;United Kingdom of Great Britain and Northern Ireland&quot;</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Hawaii&quot;</span> <span class="ot">=</span> <span class="st">&quot;United States of America&quot;</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Micronesia, Federated States of&quot;</span> <span class="ot">=</span> <span class="st">&quot;Micronesia (Federated States of)&quot;</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Cape Verde&quot;</span> <span class="ot">=</span> <span class="st">&quot;Cabo Verde&quot;</span>,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Faeroe Islands&quot;</span> <span class="ot">=</span> <span class="st">&quot;Faroe Islands&quot;</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>bioeco_countries <span class="ot">&lt;-</span> countries <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country_or_area <span class="sc">%in%</span> regions)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>bioeco_countries <span class="sc">%&gt;%</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(classification) <span class="sc">%&gt;%</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">n</span>())</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 2
+##   classification `n()`
+##   &lt;fct&gt;          &lt;int&gt;
+## 1 SIDS              12
+## 2 Africa             5
+## 3 other             45
+## 4 &lt;NA&gt;               1</code></pre>
 </div>
 
    
