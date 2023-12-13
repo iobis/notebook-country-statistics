@@ -10,13 +10,13 @@ knit: (function(inputFile, encoding) {
   rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })  
 ---
 
-## New OBIS datasets since 2020
+## New OBIS datasets since 2021
 
 ### Config
 
 ```{r message=FALSE, warning=FALSE}
-start_year <- 2020
-end_year <- 2022
+start_year <- 2021
+end_year <- 2023
 ```
 
 ### Dependencies
@@ -68,7 +68,7 @@ datasets <- datasets %>%
   left_join(country_codes, by = c("person_country" = "iso2c")) %>%
   rowwise() %>%
   mutate(country = ifelse(!is.na(inst_country), inst_country, name)) %>%
-  mutate_all(~na_if(., "")) %>%
+  mutate(across(where(is.character), ~na_if(., ""))) %>%
   filter(!is.na(country))
 
 head(datasets)
@@ -108,7 +108,7 @@ recent_stats %>%
 
 ### Visualize
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, fig.width=12, fig.height=7, dpi=300}
 stats_all_years <- recent_stats %>%
   group_by(country) %>%
   summarize(records = sum(records))
@@ -182,6 +182,7 @@ stats %>%
 
 ```{r message=FALSE, warning=FALSE}
 layers <- jsonlite::fromJSON("https://geonode.goosocean.org/api/layers/")$objects
+stopifnot(nrow(layers) < 1000)
 regions <- unlist(layers$regions)
 ```
 
@@ -194,9 +195,26 @@ regions <- plyr::revalue(regions, c(
   "United Kingdom" = "United Kingdom of Great Britain and Northern Ireland",
   "Scotland" = "United Kingdom of Great Britain and Northern Ireland",
   "Hawaii" = "United States of America",
+  "Alaska" = "United States of America",
+  "Queensland" = "Australia",
+  "Queensland" = "Australia",
+  "Newfoundland and Labrador" = "Canada",
+  "California" = "United States of America",
+  "Turkey" = "Türkiye",
   "Micronesia, Federated States of" = "Micronesia (Federated States of)",
   "Cape Verde" = "Cabo Verde",
-  "Faeroe Islands" = "Faroe Islands"
+  "Faeroe Islands" = "Faroe Islands",
+  "Baker Island" = "United States of America",
+  "Northwestern Hawaiian Islands" = "United States of America",
+  "Howland Island" = "United States of America",
+  "Jarvis Islands" = "United States of America",
+  "Johnston Atoll" = "United States of America",
+  "Kingman Reef" = "United States of America",
+  "Micronesia, Federated States of" = "Micronesia (Federated States of)",
+  "Midway Islands" = "United States of America",
+  "Palmyra Atoll" = "United States of America",
+  "Wake Island" = "United States of America",
+  "Cape Verde" = "Cabo Verde"
 ))
 ```
 

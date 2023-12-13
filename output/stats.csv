@@ -1,149 +1,147 @@
 "country","year","sids","region_name","classification","datasets","records"
-"Australia",2020,FALSE,"Oceania","other",179,25978116
-"United States of America",2020,FALSE,"Americas","other",245,9754283
-"United States of America",2021,FALSE,"Americas","other",162,6782409
-"Canada",2021,FALSE,"Americas","other",45,6434580
-"Belgium",2022,FALSE,"Europe","other",60,4873047
-"United Kingdom of Great Britain and Northern Ireland",2020,FALSE,"Europe","other",24,4715825
-"Netherlands",2022,FALSE,"Europe","other",16,3974227
-"United Kingdom of Great Britain and Northern Ireland",2022,FALSE,"Europe","other",26,3460410
-"Belgium",2020,FALSE,"Europe","other",106,3302653
-"Australia",2021,FALSE,"Oceania","other",73,2737498
-"France",2020,FALSE,"Europe","other",43,2526816
-"Germany",2020,FALSE,"Europe","other",10,2400858
-"New Zealand",2020,FALSE,"Oceania","other",14,2333197
-"United States of America",2022,FALSE,"Americas","other",60,2257658
-"Belgium",2021,FALSE,"Europe","other",102,2235125
-"Australia",2022,FALSE,"Oceania","other",71,1420809
-"Puerto Rico",2020,TRUE,"Americas","SIDS",1,1053192
-"Sweden",2021,FALSE,"Europe","other",6,995893
-"United Kingdom of Great Britain and Northern Ireland",2021,FALSE,"Europe","other",59,711939
-"Canada",2020,FALSE,"Americas","other",6,568580
-"France",2021,FALSE,"Europe","other",37,484434
+"Belgium",2023,FALSE,"Europe","other",33,14007596
+"United States of America",2021,FALSE,"Americas","other",162,6782484
+"Canada",2021,FALSE,"Americas","other",45,6569413
+"Belgium",2022,FALSE,"Europe","other",66,6513608
+"Netherlands",2022,FALSE,"Europe","other",14,3941499
+"Denmark",2023,FALSE,"Europe","other",4,3149358
+"Netherlands",2023,FALSE,"Europe","other",4,2756324
+"Australia",2021,FALSE,"Oceania","other",73,2734595
+"Norway",2023,FALSE,"Europe","other",2,2467988
+"Belgium",2021,FALSE,"Europe","other",104,2449490
+"United States of America",2022,FALSE,"Americas","other",60,2295473
+"Australia",2023,FALSE,"Oceania","other",57,2123691
+"Colombia",2023,FALSE,"Americas","other",57,2081367
+"United Kingdom of Great Britain and Northern Ireland",2022,FALSE,"Europe","other",14,1595944
+"Australia",2022,FALSE,"Oceania","other",71,1440131
+"Japan",2023,FALSE,"Asia","other",12,1422437
+"United States of America",2023,FALSE,"Americas","other",78,1381197
+"United Kingdom of Great Britain and Northern Ireland",2023,FALSE,"Europe","other",18,1379737
+"Canada",2023,FALSE,"Americas","other",33,1302544
+"Sweden",2021,FALSE,"Europe","other",5,1014236
+"Sweden",2023,FALSE,"Europe","other",4,690747
+"United Kingdom of Great Britain and Northern Ireland",2021,FALSE,"Europe","other",57,640914
 "Puerto Rico",2022,TRUE,"Americas","SIDS",2,471400
 "United States Virgin Islands",2022,TRUE,"Americas","SIDS",1,463275
-"Japan",2020,FALSE,"Asia","other",9,462911
-"Netherlands",2020,FALSE,"Europe","other",11,346004
-"Portugal",2022,FALSE,"Europe","other",10,328373
+"Portugal",2023,FALSE,"Europe","other",1,460805
+"France",2021,FALSE,"Europe","other",34,445376
+"Finland",2023,FALSE,"Europe","other",3,353580
 "Japan",2022,FALSE,"Asia","other",13,323209
+"Portugal",2022,FALSE,"Europe","other",10,322360
 "Peru",2021,FALSE,"Americas","other",2,299901
-"Italy",2021,FALSE,"Europe","other",10,255012
-"Colombia",2021,FALSE,"Americas","other",32,240275
+"Canada",2022,FALSE,"Americas","other",14,272796
+"Italy",2021,FALSE,"Europe","other",9,254562
+"Colombia",2021,FALSE,"Americas","other",32,240284
 "Brazil",2022,FALSE,"Americas","other",33,236871
-"South Africa",2022,FALSE,"Africa","Africa",1,207974
-"Colombia",2022,FALSE,"Americas","other",36,196378
-"Canada",2022,FALSE,"Americas","other",14,168269
-"France",2022,FALSE,"Europe","other",12,132059
-"Ireland",2021,FALSE,"Europe","other",23,106667
-"Estonia",2022,FALSE,"Europe","other",2,104777
-"Brazil",2020,FALSE,"Americas","other",31,100049
-"Finland",2022,FALSE,"Europe","other",2,99715
-"Spain",2020,FALSE,"Europe","other",6,91585
+"Colombia",2022,FALSE,"Americas","other",36,196381
+"South Africa",2022,FALSE,"Africa","Africa",1,190280
+"Spain",2023,FALSE,"Europe","other",4,137052
+"France",2022,FALSE,"Europe","other",11,126692
+"Estonia",2022,FALSE,"Europe","other",1,99300
 "Germany",2022,FALSE,"Europe","other",14,84583
 "Tonga",2022,TRUE,"Oceania","SIDS",2,83434
+"Jamaica",2023,TRUE,"Americas","SIDS",11,82623
 "Romania",2022,FALSE,"Europe","other",5,62815
 "Spain",2022,FALSE,"Europe","other",5,57544
-"Colombia",2020,FALSE,"Americas","other",27,56538
+"Jamaica",2021,TRUE,"Americas","SIDS",90,57089
 "New Zealand",2021,FALSE,"Oceania","other",15,55645
 "Brazil",2021,FALSE,"Americas","other",6,54191
-"Portugal",2020,FALSE,"Europe","other",2,51420
 "Italy",2022,FALSE,"Europe","other",13,49481
-"India",2020,FALSE,"Asia","other",5,49057
-"Jamaica",2021,TRUE,"Americas","SIDS",90,49033
+"France",2023,FALSE,"Europe","other",57,48421
 "Greece",2022,FALSE,"Europe","other",5,47447
-"Italy",2020,FALSE,"Europe","other",11,47381
 "Croatia",2022,FALSE,"Europe","other",1,47130
 "Malta",2022,FALSE,"Europe","other",1,47130
 "Tunisia",2022,FALSE,"Africa","Africa",1,47130
-"New Caledonia",2020,TRUE,"Oceania","SIDS",10,36766
+"Ireland",2021,FALSE,"Europe","other",22,44063
 "Norway",2022,FALSE,"Europe","other",6,34741
 "Romania",2021,FALSE,"Europe","other",4,33584
+"Denmark",2022,FALSE,"Europe","other",2,33067
+"Ecuador",2023,FALSE,"Americas","other",1,31823
+"Romania",2023,FALSE,"Europe","other",1,29137
 "Sweden",2022,FALSE,"Europe","other",3,26579
-"Norway",2020,FALSE,"Europe","other",2,22798
 "Venezuela (Bolivarian Republic of)",2022,FALSE,"Americas","other",42,21976
-"Ireland",2020,FALSE,"Europe","other",1,21901
+"China",2021,FALSE,"Asia","other",38,21451
 "Ukraine",2021,FALSE,"Europe","other",59,21061
-"China",2021,FALSE,"Asia","other",38,20008
 "Croatia",2021,FALSE,"Europe","other",7,19622
 "Venezuela (Bolivarian Republic of)",2021,FALSE,"Americas","other",28,19149
+"Germany",2021,FALSE,"Europe","other",16,18654
+"Nigeria",2023,FALSE,"Africa","Africa",52,17232
 "New Caledonia",2022,TRUE,"Oceania","SIDS",6,16952
-"Germany",2021,FALSE,"Europe","other",16,15606
-"Denmark",2022,FALSE,"Europe","other",2,14611
-"Greece",2020,FALSE,"Europe","other",3,13999
-"Israel",2020,FALSE,"Asia","other",1,13941
 "Spain",2021,FALSE,"Europe","other",9,13103
+"New Zealand",2023,FALSE,"Oceania","other",6,12738
 "India",2021,FALSE,"Asia","other",5,12645
 "Greece",2021,FALSE,"Europe","other",11,12228
-"Mexico",2020,FALSE,"Americas","other",6,11997
-"Poland",2020,FALSE,"Europe","other",2,11299
+"Philippines",2023,FALSE,"Asia","other",5,10379
 "Netherlands",2021,FALSE,"Europe","other",4,9058
-"Russian Federation",2021,FALSE,"Europe","other",3,8344
-"Solomon Islands",2020,TRUE,"Oceania","SIDS",2,7878
+"Venezuela (Bolivarian Republic of)",2023,FALSE,"Americas","other",2,8751
+"Russian Federation",2021,FALSE,"Europe","other",3,8347
+"Chile",2023,FALSE,"Americas","other",9,8215
+"Germany",2023,FALSE,"Europe","other",8,7792
 "Ireland",2022,FALSE,"Europe","other",1,7649
-"Argentina",2020,FALSE,"Americas","other",5,6687
 "Nigeria",2022,FALSE,"Africa","Africa",1,6590
 "Cameroon",2022,FALSE,"Africa","Africa",7,5882
-"New Zealand",2022,FALSE,"Oceania","other",10,5767
 "Singapore",2021,TRUE,"Asia","SIDS",4,5765
+"New Zealand",2022,FALSE,"Oceania","other",10,5760
 "Samoa",2022,TRUE,"Oceania","SIDS",2,5669
 "Denmark",2021,FALSE,"Europe","other",19,5532
+"Kenya",2023,FALSE,"Africa","Africa",2,5314
+"Argentina",2023,FALSE,"Americas","other",10,4961
 "Russian Federation",2022,FALSE,"Europe","other",3,4904
-"Poland",2021,FALSE,"Europe","other",8,4374
-"Japan",2021,FALSE,"Asia","other",15,4240
-"Micronesia (Federated States of)",2020,TRUE,"Oceania","SIDS",1,4203
-"Samoa",2020,TRUE,"Oceania","SIDS",2,4171
-"Marshall Islands",2020,TRUE,"Oceania","SIDS",1,4035
+"Italy",2023,FALSE,"Europe","other",8,4835
+"Japan",2021,FALSE,"Asia","other",15,4770
+"Ukraine",2023,FALSE,"Europe","other",6,4517
+"Poland",2021,FALSE,"Europe","other",8,4487
+"Kiribati",2023,TRUE,"Oceania","SIDS",1,3569
 "Greenland",2021,FALSE,"Americas","other",1,3468
-"Fiji",2020,TRUE,"Oceania","SIDS",1,3367
-"Lithuania",2020,FALSE,"Europe","other",1,3306
 "Tuvalu",2022,TRUE,"Oceania","SIDS",1,3090
 "Micronesia (Federated States of)",2021,TRUE,"Oceania","SIDS",1,3053
 "New Caledonia",2021,TRUE,"Oceania","SIDS",1,3053
 "Vanuatu",2022,TRUE,"Oceania","SIDS",1,3043
+"Republic of Korea",2021,FALSE,"Asia","other",14,2674
+"India",2023,FALSE,"Asia","other",3,2649
 "Nauru",2022,TRUE,"Oceania","SIDS",1,2647
 "Niue",2022,TRUE,"Oceania","SIDS",1,2623
 "Iran (Islamic Republic of)",2022,FALSE,"Asia","other",2,2575
 "Fiji",2022,TRUE,"Oceania","SIDS",1,2564
 "Bulgaria",2021,FALSE,"Europe","other",3,2559
-"Republic of Korea",2021,FALSE,"Asia","other",14,2545
 "Portugal",2021,FALSE,"Europe","other",2,2472
 "Wallis and Futuna Islands",2022,FALSE,"Oceania","other",1,2444
 "Chile",2021,FALSE,"Americas","other",6,2433
-"Mexico",2021,FALSE,"Americas","other",4,2411
-"Switzerland",2020,FALSE,"Europe","other",1,2342
+"Mexico",2021,FALSE,"Americas","other",3,2343
 "India",2022,FALSE,"Asia","other",6,2247
 "Kenya",2022,FALSE,"Africa","Africa",1,2233
 "Iceland",2022,FALSE,"Europe","other",3,2216
-"Indonesia",2020,FALSE,"Asia","other",1,1615
-"Russian Federation",2020,FALSE,"Europe","other",1,1442
+"Brazil",2023,FALSE,"Americas","other",2,1484
+"Namibia",2023,FALSE,"Africa","Africa",2,1340
 "Philippines",2022,FALSE,"Asia","other",1,1312
 "Ecuador",2022,FALSE,"Americas","other",1,1268
 "Mexico",2022,FALSE,"Americas","other",5,1262
 "Mozambique",2021,FALSE,"Africa","Africa",1,1259
 "Norway",2021,FALSE,"Europe","other",2,1075
-"Iceland",2020,FALSE,"Europe","other",2,1060
-"Iran (Islamic Republic of)",2020,FALSE,"Asia","other",4,885
-"China",2020,FALSE,"Asia","other",1,845
+"Mexico",2023,FALSE,"Americas","other",3,902
 "Tunisia",2021,FALSE,"Africa","Africa",1,710
+"Singapore",2023,TRUE,"Asia","SIDS",1,661
+"Greece",2023,FALSE,"Europe","other",5,622
+"Fiji",2023,TRUE,"Oceania","SIDS",2,530
 "Malaysia",2021,FALSE,"Asia","other",1,527
+"Poland",2023,FALSE,"Europe","other",1,456
 "Chile",2022,FALSE,"Americas","other",3,447
-"Ecuador",2020,FALSE,"Americas","other",2,387
-"Niue",2020,TRUE,"Oceania","SIDS",1,354
-"Chile",2020,FALSE,"Americas","other",1,297
+"Finland",2022,FALSE,"Europe","other",1,415
 "China",2022,FALSE,"Asia","other",1,288
 "Austria",2022,FALSE,"Europe","other",1,275
 "Ukraine",2022,FALSE,"Europe","other",1,208
-"Sweden",2020,FALSE,"Europe","other",1,180
-"Tonga",2020,TRUE,"Oceania","SIDS",1,137
+"Malaysia",2023,FALSE,"Asia","other",2,157
+"Marshall Islands",2023,TRUE,"Oceania","SIDS",1,157
 "Malaysia",2022,FALSE,"Asia","other",1,73
-"Austria",2020,FALSE,"Europe","other",1,49
 "Uruguay",2021,FALSE,"Americas","other",1,30
+"Tunisia",2023,FALSE,"Africa","Africa",2,28
 "Poland",2022,FALSE,"Europe","other",1,22
 "Argentina",2021,FALSE,"Americas","other",2,15
-"Malaysia",2020,FALSE,"Asia","other",1,15
 "Argentina",2022,FALSE,"Americas","other",1,13
 "South Africa",2021,FALSE,"Africa","Africa",2,13
-"South Africa",2020,FALSE,"Africa","Africa",1,11
 "Indonesia",2021,FALSE,"Asia","other",1,7
 "Czechia",2022,FALSE,"Europe","other",1,4
 "Switzerland",2022,FALSE,"Europe","other",1,3
+"Austria",2023,FALSE,"Europe","other",1,0
+"Cyprus",2023,FALSE,"Asia","other",1,0
+"South Africa",2023,FALSE,"Africa","Africa",3,0
